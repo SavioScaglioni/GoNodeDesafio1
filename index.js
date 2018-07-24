@@ -27,11 +27,20 @@ app.post("/check", (req, res) => {
   }
 });
 
-app.get("/major", (req, res) => {
+const userMiddlaware = (req, res, next) => {
+  if (req.query.nome === undefined || req.query.data_nascimento === undefined) {
+    console.log("Campos nome e data de nascimento são obrigatórios!");
+    res.redirect("/");
+  } else {
+    next();
+  }
+};
+
+app.get("/major", userMiddlaware, (req, res) => {
   res.render("major", { nome: req.query.nome });
 });
 
-app.get("/minor", (req, res) => {
+app.get("/minor", userMiddlaware, (req, res) => {
   res.render("minor", { nome: req.query.nome });
 });
 
